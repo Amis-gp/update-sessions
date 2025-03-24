@@ -1,0 +1,24 @@
+[13853:259:0124/144809.044500:WARNING:chrome_main_delegate.cc(672)] This is Chrome version 131.0.6778.265 (not a warning)
+[13853:259:0124/144809.326732:INFO:chrome_browser_cloud_management_controller.cc(196)] No machine level policy manager exists.
+[13859:259:0124/144809.631911:WARNING:viz_main_impl.cc(85)] VizNullHypothesis is disabled (not a warning)
+[13853:259:0124/144811.257843:INFO:CONSOLE(238)] "
+%cЗупиніться! font-family:helvetica; font-size:20px; font-size:50px; font-weight:bold; color:red; -webkit-text-stroke:1px black;", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144811.257937:INFO:CONSOLE(238)] "
+%cЦю функцію браузера призначено для розробників. Якщо хтось сказав вам щось скопіювати й сюди вставити, щоб увімкнути функцію Instagram або «зламати» чийсь обліковий запис, це шахраї. Виконавши ці дії, ви надасте їм доступ до свого облікового запису Instagram. font-family:helvetica; font-size:20px; ", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144811.257996:INFO:CONSOLE(238)] "
+%cПерегляньте https://www.facebook.com/selfxss для додаткової інформації. font-family:helvetica; font-size:20px; ", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144811.258045:INFO:CONSOLE(238)] "
+%c ", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144811.333408:INFO:CONSOLE(0)] "Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.", source: https://www.instagram.com/ (0)
+[13853:259:0124/144811.870682:INFO:CONSOLE(0)] "[DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o", source: https://www.instagram.com/ (0)
+[13853:259:0124/144818.035444:INFO:CONSOLE(238)] "
+%cЗупиніться! font-family:helvetica; font-size:20px; font-size:50px; font-weight:bold; color:red; -webkit-text-stroke:1px black;", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144818.035571:INFO:CONSOLE(238)] "
+%cЦю функцію браузера призначено для розробників. Якщо хтось сказав вам щось скопіювати й сюди вставити, щоб увімкнути функцію Instagram або «зламати» чийсь обліковий запис, це шахраї. Виконавши ці дії, ви надасте їм доступ до свого облікового запису Instagram. font-family:helvetica; font-size:20px; ", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144818.035602:INFO:CONSOLE(238)] "
+%cПерегляньте https://www.facebook.com/selfxss для додаткової інформації. font-family:helvetica; font-size:20px; ", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144818.035625:INFO:CONSOLE(238)] "
+%c ", source: https://static.cdninstagram.com/rsrc.php/v4/yV/r/UuR9wRCx8wi.js (238)
+[13853:259:0124/144818.560243:INFO:CONSOLE(1)] "Manifest: Line: 1, column: 1, Syntax error.", source: https://www.instagram.com/data/manifest.json (1)
+[13860:14851:0124/144827.904620:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net/extras/sqlite/sqlite_persistent_store_backend_base.cc:248 to client_task_runner_.
+[13860:14851:0124/144827.907697:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net/extras/sqlite/sqlite_persistent_store_backend_base.cc:248 to client_task_runner_.

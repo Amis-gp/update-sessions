@@ -1,0 +1,6 @@
+2025/01/24-14:17:23.917 2407 Reusing MANIFEST /Users/pavlo/Desktop/github/update-sessions/chrome_profiles/profile_Ciro_ro688/Default/Local Storage/leveldb/MANIFEST-000001
+2025/01/24-14:17:23.926 2407 Recovering log #3
+2025/01/24-14:17:23.927 2407 Reusing old log /Users/pavlo/Desktop/github/update-sessions/chrome_profiles/profile_Ciro_ro688/Default/Local Storage/leveldb/000003.log 
+2025/01/24-14:18:25.185 3603 Level-0 table #5: started
+2025/01/24-14:18:25.196 3603 Level-0 table #5: 16504 bytes OK
+2025/01/24-14:18:25.211 3603 Delete type=0 #3

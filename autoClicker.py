@@ -17,13 +17,14 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 import argparse
 import requests
+from webdriver_manager.chrome import ChromeDriverManager
 
 def load_session_credentials():
     with open('credentials.json', 'r') as f:
         credentials = json.load(f)
     return credentials
 
-def human_like_sleep(min_time=1, max_time=3):
+def human_like_sleep(min_time=0.5, max_time=1.5):
     time.sleep(random.uniform(min_time, max_time))
 
 def login(login_index,with_failed, results):
@@ -33,12 +34,15 @@ def login(login_index,with_failed, results):
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--start-maximized")
-    # chrome_options.add_argument("--headless")  # Uncomment if needed for headless mode
     chrome_options.add_argument(
         "user-agent=Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36"
     )
 
-    service = Service(os.path.join(os.getcwd(), 'chromedriver'))
+    # Додаємо директорію для профілів браузера
+    profiles_directory = 'chrome_profiles'
+    os.makedirs(profiles_directory, exist_ok=True)
+    
+    service = Service(ChromeDriverManager().install())
     storage_directory = 'sessions'
     os.makedirs(storage_directory, exist_ok=True)
 
@@ -46,51 +50,94 @@ def login(login_index,with_failed, results):
         credentials = check_accounts(credentials)
 
     for i in range(login_index, len(credentials)):
+        print(f"акаунт: {credentials[i]['login']} n: {i}")
+        profile_path = os.path.join(profiles_directory, f'profile_{credentials[i]["login"]}')
+        os.makedirs(profile_path, exist_ok=True)
+        
+        chrome_options.add_argument(f'--user-data-dir={profile_path}')
+        
         driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get('https://www.instagram.com/')
+        time.sleep(0.5)
+        
         try:
-            WebDriverWait(driver, 5).until(
+            WebDriverWait(driver, 3).until(
                 EC.element_to_be_clickable((By.XPATH, '//button[div[text()="Увійти"]]'))
             ).click()
         except Exception:
-            pass  # Ignore if the button is not present
+            pass
 
-        # Locate username and password fields
-        username_field = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.NAME, "username"))
-        )
-        password_field = driver.find_element(By.NAME, "password")
-
-        # Fill in the credentials
+        # Пробуємо знайти поля для входу
         try:
+            username_field = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.NAME, "username"))
+            )
+            password_field = driver.find_element(By.NAME, "password")
+            
+            # Якщо знайшли поля - виконуємо вхід
             username_field.send_keys(credentials[i]['login'])
             password_field.send_keys(credentials[i]['password'])
-        except IndexError:
-            print("Credentials index out of range.")
-            results.append({credentials[i]['login']: 'failed'})
+            human_like_sleep()
+            password_field.submit()
+
+            # якщо потрібно щоб аккаунт був відкритий довше то змінити тут цифру з 0 на будь-яку більшу час в секундах
+            print("пауза 1")
+            while True:
+                if input(f"акаунт: {credentials[i]['login']} Натисніть 'y' щоб продовжити: ").lower() == 'y':
+                    break
+            
+        except Exception:
+            print("пауза 2")
+            while True:
+                if input(f"акаунт: {credentials[i]['login']} Натисніть 'y' щоб продовжити: ").lower() == 'y':
+                    break
+
+            # Якщо не знайшли поля - значить вже на акаунті
+            print(f"Вже виконаний вхід для {credentials[i]['login']}")
+            
+            # Додаємо перевірку на challenge після автоматичного входу
+            if "challenge" in driver.current_url:
+                try:
+                    WebDriverWait(driver, 30).until(
+                        EC.element_to_be_clickable((By.XPATH, '//div[@aria-label="Відхилити"]'))
+                    ).click()
+                    print('Dismissed label')
+                except Exception:
+                    print(f"Аккаунт заблоковано або треба номер: {credentials[i]['login']}")
+                    results.append({credentials[i]['login']: 'failed'})
+                    driver.quit()
+                    continue
+
+            # Продовжуємо зі збереженням сесії
+            session_data = driver.get_cookies()
+            formatted_cookies = {cookie['name']: cookie['value'] for cookie in session_data}
+            pickle_file_path = os.path.join(storage_directory, credentials[i]['session'])
+
+            with open(pickle_file_path, 'wb') as pickle_file:
+                pickle.dump(formatted_cookies, pickle_file)
+
+            laravel_url = "http://167.172.43.122/api/add-session"
+            send_session_file_to_laravel(pickle_file_path, laravel_url)
+
+            ig = instaloader.Instaloader(rate_controller=lambda ctx: instaloader.RateController(ctx))
+            try:
+                ig.load_session_from_file(credentials[i]['login'], pickle_file_path)
+            except instaloader.exceptions.AbortDownloadException as e:
+                print(f"Download aborted: {e}")
+            except instaloader.exceptions.TooManyRequestsException as e:
+                print(f"Rate limit exceeded: {e}")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+
+            ig.save_session_to_file(pickle_file_path)
+           
+            results.append({credentials[i]['login']: 'success'})
             driver.quit()
             continue
 
-        human_like_sleep()
-
-        # Submit login form
-        try:
-            password_field.submit()
-        except Exception:
-            # Attempt alternate login if the first method fails
-            try:
-                WebDriverWait(driver, 25).until(
-                    EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div/div/div/div[3]/div/div/div/div/div[2]/div[3]/div[3]/div/div/div'))
-                ).click()
-                alternate_login = True
-            except Exception:
-                print("Alternate login failed.")
-                results.append({credentials[i]['login']: 'failed'})
-                driver.quit()
-                continue
-
         if alternate_login:
-            time.sleep(10)
+            time.sleep(4)
+
         try:
             WebDriverWait(driver, 9).until(
                 EC.element_to_be_clickable((By.XPATH, '//div[text()="Не зараз"]'))
@@ -101,17 +148,13 @@ def login(login_index,with_failed, results):
                     WebDriverWait(driver, 30).until(
                         EC.element_to_be_clickable((By.XPATH, '//div[@aria-label="Відхилити"]'))
                     ).click()
-                    time.sleep(3)
                     print('Dismissed label')
                 except Exception:
                     print(f"Аккаунт заблоковано або треба номер: {credentials[i]['login']}")
                     results.append({credentials[i]['login']: 'failed'})
                     driver.quit()
                     continue
-            else:
-                # якщо потрібно щоб аккаунт був відкритий довше то змінити тут цифру з 5 на будь-яку більшу час в секундах
-                time.sleep(5)
-        time.sleep(4)
+    
         session_data = driver.get_cookies()
         formatted_cookies = {cookie['name']: cookie['value'] for cookie in session_data}
         pickle_file_path = os.path.join(storage_directory, credentials[i]['session'])
@@ -133,7 +176,7 @@ def login(login_index,with_failed, results):
             print(f"Unexpected error: {e}")
 
         ig.save_session_to_file(pickle_file_path)
-        print(f"Saved session for: {credentials[i]['login']}, session: {credentials[i]['session']}")
+        print(f"Saved session for: {credentials[i]['login']}, session: {credentials[i]['session']}\n\n")
         results.append({credentials[i]['login']: 'success'})
         alternate_login = False
         driver.quit()

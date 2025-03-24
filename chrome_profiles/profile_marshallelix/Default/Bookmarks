@@ -1,0 +1,47 @@
+{
+   "checksum": "2d6f5274fdbeba02f2c358ddba9f641d",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13382032001976358",
+            "date_last_used": "0",
+            "guid": "77309f23-cb13-4a7c-b0a9-865922b9ace4",
+            "id": "5",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "Instagram",
+            "type": "url",
+            "url": "https://www.instagram.com/"
+         } ],
+         "date_added": "13382031994923779",
+         "date_last_used": "0",
+         "date_modified": "13382032009047242",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Панель закладок",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13382031994923786",
+         "date_last_used": "0",
+         "date_modified": "13382032001976358",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Інші закладки",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13382031994923802",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Закладки на мобільному",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}
